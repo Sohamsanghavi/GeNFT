@@ -1,4 +1,5 @@
 import Identicon from "react-identicons"
+import { setGlobalState } from "../store";
 
 const Hero = () => {
     return (
@@ -11,7 +12,10 @@ const Hero = () => {
                     <p className="text-gray-500 font-semibold text-sm mt-3">Mint and collect the hottest NFT's around.</p>
                 </div>
                 <div className="flex mt-5">
-                    <button className="shadow-xl shadow-black text-white bg-[#e32970] hover:bg-[#bd255f] p-2 rounded-full">
+                    <button 
+                        className="shadow-xl shadow-black text-white bg-[#e32970] hover:bg-[#bd255f] p-2 rounded-full"
+                        onClick={() => setGlobalState("modal", "scale-100")}
+                    >
                         Create NFTs
                     </button>
                     {/* <button className="shadow-xl shadow-black text-white bg-[#e32970] hover:bg-[#bd255f] p-2 rounded-full">

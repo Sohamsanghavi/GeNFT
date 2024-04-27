@@ -1,16 +1,20 @@
-import React from "react"
-import Header from "./component/Header"
-import Hero from "./component/Hero"
-import Artworks from "./component/Artworks"
-import Transactions from "./component/Transactions"
-import Footer from "./component/Footer"
-import CreateNFT from "./component/CreateNFT"
-import ShowNFT from "./component/ShowNFT"
-import UpdateNFT from "./component/updateNFT"
-import Loading from "./component/Loading"
-import Alert from "./component/Alert"
+import { useEffect } from 'react'
+import { isWallectConnected } from './Blockchain.Services'
+import Alert from './component/Alert'
+import Artworks from './component/Artworks'
+import CreateNFT from './component/CreateNFT'
+import Footer from './component/Footer'
+import Header from './component/Header'
+import Hero from './component/Hero'
+import Loading from './component/Loading'
+import ShowNFT from './component/ShowNFT'
+import Transactions from './component/Transactions'
+import UpdateNFT from './component/updateNFT'
 
 const App = () => {
+  useEffect(async () => {
+    await isWallectConnected()
+  }, [])
   return (
     <div className="min-h-screen">
       <div className="gradient-bg-hero">
@@ -21,9 +25,9 @@ const App = () => {
       <Transactions />
       <Footer />
       <CreateNFT />
+      <Loading />
       <ShowNFT />
       <UpdateNFT />
-      <Loading />
       <Alert />
     </div>
   )

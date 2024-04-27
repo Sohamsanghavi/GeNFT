@@ -83,17 +83,18 @@ const ShowNFT = () => {
             >
             Purchase Now
             </button>
-            {/* <button
-            className="flex flex-row justify-center items-center
-                w-full text-white text-md bg-[#e32970]
-                hover:bg-[#bd255f] py-2 px-5 rounded-full
-                drop-shadow-xl border border-transparent
-                hover:bg-transparent hover:text-[#e32970]
-                hover:border hover:border-[#bd255f]
-                focus:outline-none focus:ring mt-5"
+            <button
+                className="flex flex-row justify-center items-center
+                    w-full text-white text-md bg-[#e32970]
+                    hover:bg-[#bd255f] py-2 px-5 rounded-full
+                    drop-shadow-xl border border-transparent
+                    hover:bg-transparent hover:text-[#e32970]
+                    hover:border hover:border-[#bd255f]
+                    focus:outline-none focus:ring mt-5"
+                    onClick={onChangePrice}
             >
             Change Price
-            </button> */}
+            </button>
         </div>
         </div>
     </div>

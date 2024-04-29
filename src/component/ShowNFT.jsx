@@ -1,6 +1,7 @@
 import Identicon from 'react-identicons'
 import { FaTimes } from 'react-icons/fa'
-import { useGlobalState, setGlobalState, truncate } from '../store'
+import { useGlobalState, setGlobalState, truncate, setAlert } from '../store'
+import { buyNFT } from '../Blockchain.Services'
 
 const ShowNFT = () => {
  const [showModal] = useGlobalState('showModal')
@@ -9,13 +10,26 @@ const ShowNFT = () => {
 
  const onChangePrice = () => {
    setGlobalState('showModal', 'scale-0')
-   setGlobalState('updateModal', 'scale-100')
+
+
+ setGlobalState('updateModal', 'scale-100')
  }
 
-
-
-const handleNFTPurchase = () => {
+ const handleNFTPurchase = async () => {
    setGlobalState('showModal', 'scale-0')
+   setGlobalState('loading', {
+     show: true,
+     msg: 'Initializing NFT transfer...',
+   })
+
+   try {
+     await buyNFT(nft)
+     setAlert('Transfer completed...', 'green')
+     window.location.reload()
+   } catch (error) {
+     console.log('Error transfering NFT: ', error)
+     setAlert('Purchase failed...', 'red')
+   }
  }
 
  return (
@@ -66,8 +80,7 @@ const handleNFTPurchase = () => {
                </div>
              </div>
 
-
-           <div className="flex flex-col">
+             <div className="flex flex-col">
                <small className="text-xs">Current Price</small>
                <p className="text-sm font-semibold">{nft?.cost} ETH</p>
              </div>

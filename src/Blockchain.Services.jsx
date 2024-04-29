@@ -17,7 +17,7 @@ const getEtheriumContract = async () => {
  if (connectedAccount) {
   
    const web3 = window.web3
-   const networkId = 1714328329625;
+   const networkId = 1714394864642;
    console.log(networkId)
    const networkData = abi.networks[networkId]
    if (networkData) {
@@ -113,6 +113,33 @@ return nfts
   }))
   .reverse()
 }
+const updateNFT = async ({ id, cost }) => {
+  try {
+    cost = window.web3.utils.toWei(cost.toString(), 'ether')
+    const contract = await getEtheriumContract()
+    const buyer = getGlobalState('connectedAccount')
+ 
+    await contract.methods.changePrice(Number(id), cost).send({ from: buyer })
+  } catch (error) {
+    reportError(error)
+  }
+ }
+
+ const buyNFT = async ({ id, cost }) => {
+  try {
+    cost = window.web3.utils.toWei(cost.toString(), 'ether')
+    const contract = await getEtheriumContract()
+    const buyer = getGlobalState('connectedAccount')
+ 
+    await contract.methods
+      .payToBuy(Number(id))
+      .send({ from: buyer, value: cost })
+ 
+    return true
+  } catch (error) {
+    reportError(error)
+  }
+ }
 
 const reportError = (error) => {
  setAlert(JSON.stringify(error), 'red')
@@ -123,6 +150,8 @@ export {
  connectWallet,
  isWallectConnected,
  mintNFT,
- getAllNFTs
+ getAllNFTs,
+ updateNFT,
+ buyNFT
 }
 

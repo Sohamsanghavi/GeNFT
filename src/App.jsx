@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { isWallectConnected } from './Blockchain.Services'
+import { getAllNFTs ,isWallectConnected } from './Blockchain.Services'
 import Alert from './component/Alert'
 import Artworks from './component/Artworks'
 import CreateNFT from './component/CreateNFT'
@@ -14,6 +14,7 @@ import UpdateNFT from './component/updateNFT'
 const App = () => {
   useEffect(async () => {
     await isWallectConnected()
+    await getAllNFTs()
   }, [])
   return (
     <div className="min-h-screen">

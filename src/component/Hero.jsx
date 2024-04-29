@@ -1,7 +1,12 @@
-import Identicon from "react-identicons"
-import { setGlobalState } from "../store";
+import Identicon from 'react-identicons'
+import { setGlobalState, useGlobalState, truncate } from '../store'
 
 const Hero = () => {
+ const [connectedAccount] = useGlobalState('connectedAccount')
+
+ const onCreatedNFT = () => {
+   setGlobalState('modal', 'scale-100')
+ }
     return (
         <div className="flex flex-col md:flex-row w-4/5 justify-between
         items-center mx-auto py-10">

@@ -1,7 +1,20 @@
-import React from 'react'
-import { useState } from "react"
-import { FaTimes } from 'react-icons/fa'
-import { useGlobalState, setGlobalState } from '../store'
+import {
+    useGlobalState,
+    setGlobalState,
+    setLoadingMsg,
+    setAlert,
+  } from '../store'
+  import { useState } from 'react'
+  import { FaTimes } from 'react-icons/fa'
+  import { create } from 'ipfs-http-client'
+  import { mintNFT } from '../Blockchain.Services'
+
+  const client = create({
+    host: 'localhost',
+    port: 5001,
+    protocol: 'http',
+  });
+  
 
 const CreateNFT = () => {
     const [modal] = useGlobalState('modal')
@@ -14,9 +27,38 @@ const CreateNFT = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (!title || !price || !description) return
-        console.log("Minted")
-        closeModal()
-    }
+
+        setGlobalState('modal', 'scale-0')
+        setLoadingMsg('Uploading IPFS data...')
+    
+        try {
+          const created = await client.add(fileUrl)
+          const metadataURI = `https://ipfs.io/${created.path}`
+          const nft = { title, price, description, metadataURI }
+            console.log(nft)
+          setLoadingMsg('Intializing transaction...')
+          setFileUrl(metadataURI)
+          await mintNFT(nft)
+    
+          resetForm()
+          setAlert('Minting completed...', 'green')
+          window.location.reload()
+        } catch (error) {
+          console.log('Error uploading file: ', error)
+          setAlert('Minting failed...', 'red')
+        }
+      }
+    
+      const changeImage = async (e) => {
+        const reader = new FileReader()
+        if (e.target.files[0]) reader.readAsDataURL(e.target.files[0])
+    
+        reader.onload = (readerEvent) => {
+          const file = readerEvent.target.result
+          setImgBase64(file)
+          setFileUrl(e.target.files[0])
+        }
+      }
 
     const closeModal = () => {
         setGlobalState('modal', 'scale-0')
@@ -67,6 +109,7 @@ const CreateNFT = () => {
                         file:bg-[#19212c] file:text-gray-400
                         hover:file:bg-[#1d2631]
                         cursor-pointer focus:ring-0 focus:outline-none"
+                        onChange={changeImage}
                         required
                     />
                     </label>
@@ -92,8 +135,8 @@ const CreateNFT = () => {
                         text-slate-500 bg-transparent border-0
                         focus:outline-none focus:ring-0"
                     type="number"
-                    step={0.01}
-                    min={0.01}
+                    step={0.001}
+                    min={0.001}
                     name="price"
                     placeholder="Price (Eth)"
                     value={price}

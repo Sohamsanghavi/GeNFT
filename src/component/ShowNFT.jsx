@@ -8,6 +8,8 @@ const ShowNFT = () => {
  const [connectedAccount] = useGlobalState('connectedAccount')
  const [nft] = useGlobalState('nft')
 
+ console.log(nft)
+
  const onChangePrice = () => {
    setGlobalState('showModal', 'scale-0')
 

@@ -8,14 +8,11 @@ import {
   import { FaTimes } from 'react-icons/fa'
   import { create } from 'ipfs-http-client'
   import { mintNFT } from '../Blockchain.Services'
-
   const client = create({
     host: 'localhost',
     port: 5001,
     protocol: 'http',
   });
-  
-
 const CreateNFT = () => {
     const [modal] = useGlobalState('modal')
     const [title, setTitle] = useState('')
@@ -32,33 +29,36 @@ const CreateNFT = () => {
         setLoadingMsg('Uploading IPFS data...')
     
         try {
-          const created = await client.add(fileUrl)
-          const metadataURI = `https://ipfs.io/${created.path}`
+        const metadataURI = `https://ipfs.io/ipfs/${fileUrl}`;
           const nft = { title, price, description, metadataURI }
             console.log(nft)
           setLoadingMsg('Intializing transaction...')
-          setFileUrl(metadataURI)
           await mintNFT(nft)
     
           resetForm()
           setAlert('Minting completed...', 'green')
-          window.location.reload()
         } catch (error) {
           console.log('Error uploading file: ', error)
           setAlert('Minting failed...', 'red')
         }
       }
     
-      const changeImage = async (e) => {
-        const reader = new FileReader()
-        if (e.target.files[0]) reader.readAsDataURL(e.target.files[0])
-    
-        reader.onload = (readerEvent) => {
-          const file = readerEvent.target.result
-          setImgBase64(file)
-          setFileUrl(e.target.files[0])
+      const changeImage = async (e) =>{
+         var file = e.target.files[0];
+      //check for file extension
+      try {
+        const response =  await client.add(file);
+
+        if (response) {
+            console.log(response.cid);
+          console.log("Uploaded image to Pinata: ", response);
+          setFileUrl(response.cid);
         }
+      } catch (e) {
+        console.log("Error during file upload", e);
       }
+    }
+  
 
     const closeModal = () => {
         setGlobalState('modal', 'scale-0')

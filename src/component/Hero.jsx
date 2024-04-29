@@ -1,12 +1,25 @@
 import Identicon from 'react-identicons'
 import { setGlobalState, useGlobalState, truncate } from '../store'
+import { useState } from 'react'
 
 const Hero = () => {
  const [connectedAccount] = useGlobalState('connectedAccount')
-
+ const [imgBase64, setImgBase64] = useState(null)
+ const [fileUrl, setFileUrl] = useState('')
  const onCreatedNFT = () => {
    setGlobalState('modal', 'scale-100')
  }
+ const changeImage = async (e) => {
+    const reader = new FileReader()
+    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0])
+
+    reader.onload = (readerEvent) => {
+      const file = readerEvent.target.result
+      setImgBase64(file)
+      setFileUrl(e.target.files[0])
+    }
+  }
+
 
  return (
    <div
@@ -36,32 +49,18 @@ const Hero = () => {
            Create NFT
          </button>
        </div>
-
-       <div className="w-3/4 flex justify-between items-center mt-5">
- <div>
-           <p className="text-white font-bold">1231k</p>
-           <small className="text-gray-300">User</small>
-         </div>
-         <div>
-           <p className="text-white font-bold">152k</p>
-           <small className="text-gray-300">Artwork</small>
-         </div>
-         <div>
-           <p className="text-white font-bold">200k</p>
-           <small className="text-gray-300">Artist</small>
-         </div>
-       </div>
      </div>
 
      <div
        className="shadow-xl shadow-black md:w-2/5 w-full
      mt-10 md:mt-0 rounded-md overflow-hidden bg-gray-800"
      >
-       <img
-         src="https://images.cointelegraph.com/images/1434_aHR0cHM6Ly9zMy5jb2ludGVsZWdyYXBoLmNvbS91cGxvYWRzLzIwMjEtMDYvNGE4NmNmOWQtODM2Mi00YmVhLThiMzctZDEyODAxNjUxZTE1LmpwZWc=.jpg"
+         <img
+         src="https://ivory-negative-crawdad-412.mypinata.cloud/ipfs/QmeeFkKNz5RC4919R7Ji4LZe7vswXkaHCpsjxR9gdBcHih?pinataGatewayToken=GyCJrN7RhbIo0GxovYv7QNInTbKA_FqcMrLWDgYgvmK47dCZ1jTz7CnT9zTPcbcS"
          alt="NFT Art"
          className="h-60 w-full object-cover"
        />
+
        <div className="flex justify-start items-center p-3">
          <Identicon
            string={connectedAccount ? connectedAccount : 'Connect Your Wallet'}

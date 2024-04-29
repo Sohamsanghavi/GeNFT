@@ -13,12 +13,12 @@ Install these prerequisites to follow along with the tutorial. See free video tu
 
 
 ## Step 1. Clone the project
-`git clone https://github.com/Daltonic/tailwind_truffle_starter_kit <PROJECT NAME>`
+`git clone https://github.com/Sohamsanghavi/GeNFT.git `
 
 ## Step 2. Install dependencies
 ```sh
 $ cd <PROJECT NAME>
-$ yarn install # or npm install
+$ npm install
 ```
 ## Step 3. Start Ganache-CLI
 Open the terminal and run the command below.
